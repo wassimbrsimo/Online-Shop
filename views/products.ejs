@@ -1,0 +1,60 @@
+<% include imports/header.ejs%>
+
+  <script>
+      $(document).ready(function () {
+          $('.dropdown-toggle').dropdown();
+      });
+  </script>
+  <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+  <nav class="navbar navbar theme">
+      <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/">TProducts</a>
+            </div>
+          <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li class="dropdown">
+              <a class="dropdown-toggle active" data-toggle="dropdown" href="/products">Produits
+              <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/products/CPU">CPU</a></li>
+                  <li><a href="/products/GPU">GPU</a></li>
+                  <li><a href="/products/RAM">RAM</a></li>
+                  <li><a href="/products/Carte Mere">Carte Mere</a></li>
+                  <li><a href="/products/Disque Dur">Disque Dur</a></li>
+                  <li><a href="/products/Alimentation">Alimentation</a></li>
+                  <li><a href="/products/Boitiers">Boitiers</a></li>
+                  <li><a href="/products/Ecran">Ecran</a></li>
+              </ul>
+              </li>
+              <li><a href="/contact">Contact Us</a></li>
+              </ul>
+            <ul class="nav navbar-nav navbar-right">
+           <%if(!logged){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><%}
+             else if(account.type=="admin"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/admin/products"><span class="glyphicon glyphicon-cog"></span> Admin</a></li><%}
+             else if(account.type=="client"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/client"><span class="glyphicon glyphicon-shopping-cart"></span><strong> <%=account.username%></strong> | Mes Achats <span class="badge badge-inverse"><%=account.cart.length%></span> <span class="badge" style="background-color:green"><%var total=0;for(var i=0;i<account.cart.length;i++){total+=account.cart[i].price;}%><%=total%></span></a></li><%}
+              else {%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/logout"><span class="glyphicon glyphicon-barcode"></span>Manage Stock</a></li><%}%>
+          </ul>
+      </div>
+  </nav></div>
+
+</form>
+<div class="container" style="padding-left: 18% ,padding-right : 18%">
+  <br><br>
+  <div class="panel panel text-center" >
+    <div class="panel-heading theme text-center">
+      <%if(prods[0].category!=null){  %><h1><%=prods[0].category%></h1> <a href="/products/<%=prods[0].category%>/p"><div class="label label-danger">plus cher !</div></a>
+                                                                 <a href="/products/<%=prods[0].category%>/m"><div class="label label-success">moins cher !</div></a>
+                                                                 <a href="/products/<%=prods[0].category%>/n"><div class="label label-primary">plus récent !</div></a>
+                                                                  <a href="/products/<%=prods[0].category%>/a"><div class="label label-default">plus ancien !</div></a>
+                                                                   <a href="/products/<%=prods[0].category%>/d"><div class="label label-danger">disponnibilité</div></a><%}%>
+    </div>
+    <div class="panel-body">
+      <%include displaygrid.ejs%>
+
+    </div>
+      </div>
+    </div>
+
+      </div>
+<% include imports/footer.ejs %>

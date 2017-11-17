@@ -1,0 +1,43 @@
+*{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10px;
+}
+
+#selectcat  {
+  transition: background-color 0.5s;
+  transition: box-shadow 2s;
+  transition: background-color 0.5s;
+  background-color: white;
+}
+
+#selectcat:hover{
+  background-color: rgb(240,250,255);
+   box-shadow: 5px 0px 40px rgba(210,210,230, .5);
+   cursor: pointer;
+}
+#selectcat:active{
+  background-color: rgb(210,210,235);
+}
+#selectcat h3{
+  font-size: 20px;
+  font-size: 20px;
+  padding-bottom: 25px;
+  transition: font-size 0.5s;
+}
+#selectcat:hover h3{
+  font-size: 25px;
+}
+#selectcat:active h3{
+  font-size: 15px;
+}
+
+#selectcat span {
+  padding: 20px;
+  font-size: 50px;
+  transition: padding 0.5s;
+}
+#selectcat:hover span{
+  padding:  0px;
+  padding-top: 8px;
+
+}

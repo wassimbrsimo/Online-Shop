@@ -1,0 +1,54 @@
+<% include imports/header.ejs%>
+  <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+  <nav class="navbar navbar theme">
+      <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/">TProducts</a>
+            </div>
+          <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li class="active"><a href="/account/admin/products">Products</a></li>
+              <li ><a href="/account/admin/accs">Accounts</a></li>
+              </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </div>
+  </nav></div>
+
+<div class="container" style="padding-left: 18% ,padding-right : 18%">
+      <div class="panel-heading text-center"  style="margin:10px">
+        <form action="/addp" method="get">
+        <button type="submit" class="btn btn-success" style="float:center">Add Product
+          <i class="glyphicon glyphicon-plus"></i></form>
+        <form style="display: inline ,float:right" action="/delete/all" method="post">
+                      <button type="submit" class="btn btn-danger" style="float:center">Delete All
+                        <i class="glyphicon glyphicon-remove"></i>
+        </button></form>
+      </div><br>
+        <div class="row text-center">
+          <% for (var i = 0; i < prods.length; i++) {%>
+        <div class="col-sm-3"  id="prodSelect" >
+          <div class="thumbnail" style="margin:8px">
+                        <img  src="<%= prods[i].image%>">
+
+              <form style="display: inline " action="/delete/<%= prods[i]._id %>" method="post">
+                            <button type="submit" class="btn btn-danger">
+                              <i class="glyphicon glyphicon-remove"></i>
+              </button></form>
+              <form style="display: inline " action="/edit/<%= prods[i]._id %>" method="get">
+                            <button type="submit" class="btn btn-success">
+                              <i class="glyphicon glyphicon-pencil"></i>
+              </button></form>
+
+            <p><strong><%= prods[i].name %></strong></p>
+            <p><strong>price : </strong><%= prods[i].price%></p>
+            <p><strong>Catégorie :</strong> <%= prods[i].category%></p>
+            <p><strong>date :</strong> il y a <% if(((Date.now()-prods[i].date)/60000).toFixed()<60){%>
+              <%=((Date.now()-prods[i].date)/60000).toFixed();%> minutes<%}else {%> <%=((Date.now()-prods[i].date)/3600000).toFixed();%> Heures<%}%></p>
+         </div>
+       </div>
+    <%} %>
+        </div>
+      </div>
+    </div>
+<% include imports/footer.ejs %>

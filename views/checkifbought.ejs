@@ -1,0 +1,10 @@
+<%if(logged==true && account.type=="client"){
+  var exist=false;var index;
+  for (var j = 0; j < account.cart.length; j++){
+        if(account.cart[j].name==prods[i].name){exist=true;index=j;}
+  }   %>
+<%if(exist){%>  <form action="/deletebuy/<%=index%>" method="post">
+<button class="btn btn-sm btn-warning btn-block">Suprimer du panier!</button><%}
+else {%>  <form action="/buy/<%=prods[i]._id%>" method="post">
+  <button class="btn btn-sm btn-success btn-block <%if(prods[i].quantity<=0){%>disabled<%}%>"><%if(prods[i].quantity<=0){%>Can't <%}%>Buy !</button><%}%></form>
+   <%}%>

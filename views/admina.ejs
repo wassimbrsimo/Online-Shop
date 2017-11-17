@@ -1,0 +1,48 @@
+<% include imports/header.ejs%>
+
+  <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+  <nav class="navbar navbar theme">
+      <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/">TProducts</a>
+            </div>
+          <ul class="nav navbar-nav">
+              <li class="active"><a href="/">Home</a></li>
+              <li ><a href="/account/admin/products">Products</a></li>
+              <li ><a href="/account/admin/accs">Accounts</a></li>
+              </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </div>
+  </nav></div>
+
+<div class="container" style="padding-left: 18% ,padding-right : 18%">
+      <div class="row text-center"> </div>
+
+
+                                                          <table class="table table-condensed text-center">
+                                                            <tr>
+                                                              <td colspan="3"><h1>LISTE DES COMPTES    <a href="/adda" class="glyphicon glyphicon-plus"></a> </h1></td>
+                                                            </tr> <% for (var i = 0; i < prods.length; i++) {%>
+                                                            <%if(prods[i].type=="client"){%>
+                                                            <tr class="success"><%} %>
+                                                            <% if(prods[i].type=="gérant"){%>
+                                                            <tr class="danger"><%} %>
+                                                            <td><%=prods[i].username%></td>
+                                                            <td><%=prods[i].type%> </td>
+                                                            <%if(prods[i].type!="admin"){    %>                        <td>
+                                                              <form style="display: inline " action="/deletea/<%= prods[i]._id %>" method="post">
+                                                                              <button type="submit" class="btn btn-primary">
+                                                                                <i class="glyphicon glyphicon-remove"></i>
+                                                                </button></form>
+                                                                <form style="display: inline " action="/edita/<%= prods[i]._id %>" method="get">
+                                                                              <button type="submit" class="btn btn-primary">
+                                                                                <i class="glyphicon glyphicon-pencil"></i>
+                                                                </button></form>
+                                                              </td><%}%>
+                                                            </tr><%}%>
+
+</table>
+      </div>
+      </div>
+<% include imports/footer.ejs %>

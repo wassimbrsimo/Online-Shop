@@ -1,0 +1,29 @@
+<% include imports/header.ejs%>
+<div class="container text-center" style="padding-left:40% ,padding-right:40%">
+  <table class="table table-striped">
+    <tr>
+      <td colspan="3"> <h1>COMMANDE </h1></td>
+    </tr>
+  <tr>
+    <td><strong>N° Produit</strong></td>
+    <td><strong>Nom du produit</strong></td>
+    <td><strong>prix D'unité </strong></td>
+  </tr>
+<%var t=0; for(var i=0;i<products.length;i++){%>
+  <tr>
+    <td><%=i+1%></td>
+    <td><%=products[i].name%></td>
+    <td><%=products[i].price%></td>
+  </tr>
+  <%t+=products[i].price;}%>
+  <tr>
+    <td colspan="3"> <strong>Prix Total:</strong> <%=t%> <strong>DA</strong></td>
+  </tr>
+
+</table>
+<table>  <tr class="warning">
+    <h3>Confirmez Vous la Commande ? <form action="/command" method="post">
+    <button class="btn btn-sm btn-danger btn-block" >COMMANDEZ !</button></form></h3>
+  </tr></table>
+</div>
+<% include imports/footer.ejs %>

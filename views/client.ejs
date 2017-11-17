@@ -1,0 +1,90 @@
+<% include imports/header.ejs%>
+<h1></h1>
+  <h2></h2>
+  <script>
+      $(document).ready(function () {
+          $('.dropdown-toggle').dropdown();
+      });
+  </script>
+  <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+  <nav class="navbar navbar theme">
+      <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/">TProducts</a>
+            </div>
+          <ul class="nav navbar-nav">
+              <li ><a href="/">Home</a></li>
+              <li class="active"><a href="/account/client">Achats</a></li>
+              </ul>
+            <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+      </div>
+  </nav></div>
+
+<div class="container" style="padding-left: 18% ,padding-right : 18%">
+    <div class="panel theme text-center">
+      <div class="panel-heading text-center">
+        <h3><strong>Panier</strong></h3>
+      </div>
+                                                          <div class="row text-center">
+                                              </div>
+
+
+                                                          <table class="table table-condensed">  <%if(prods!=null){ var total =0;for (var i = 0; i < prods.length; i++) {%>
+                                                            <tr class="warning">
+                                                              <td><img src="<%=prods[i].image%>" alt="<%=prods[i].name%>" height=100%></td>
+                                                            <td style="padding-top:45px"><strong><%=prods[i].name%> <%=i%></strong></td>
+                                                            <td style="padding-top:45px"><strong><%=prods[i].price%></strong> </td>
+                                                            <td>
+                                                              <form style="display: inline " action="/deletebuy/<%=i%>" method="post">
+                                                                              <button type="submit" style="margin-top:30px" class="btn btn-default">
+                                                                                <i class="glyphicon glyphicon-remove" style="color:red"></i>
+                                                                </button></form>
+                                                              </td>
+                                                            </tr><%total+=prods[i].price;}%>
+
+</table>   <div class="container">
+            <div class="col-sm-5">
+              <h3>TOTAL NET A PAYER : </h3>
+            </div>
+            <div class="col-sm-3">
+              <h1 style="margin-top:5px"><div class="label label-danger"><%=total%> <strong> DA TTC</strong></div></h1>
+            </div>
+            <div class="col-sm-4" style="padding-top:10px">
+    <form action="/command" method="get">
+    <button class="btn btn-sm btn-warning" style="padding: 10px 35px">Commandez !</button></div><%}%>
+      </div>
+    </div>
+
+    <div class="container text">
+      <div class="panel panel-heading text-center">
+        <h3>COMMANDS HISTORY</h3>
+      </div>
+    <div class="row text-center">
+    <%for(var j=coms.length-1;j>=0;j--){%>
+      <div class="col-sm-12">
+        <div class="panel panel-heading theme">
+          <h6>COMMANDE ( il y a  <% if(((Date.now()-coms[j].date)/60000).toFixed()<60){%>
+            <%=((Date.now()-coms[j].date)/60000).toFixed();%> minutes<%}else {%> <%=((Date.now()-coms[j].date)/3600000).toFixed();%> Heures<%}%>)</h6>
+        </div>
+      <table class="table table-striped">
+      <tr class="theme">
+        <td><h4><strong>Nom du produit</strong></td>
+        <td><h4><strong>prix</strong></td>
+      </tr>
+    <%var t=0; for(var i=0;i<coms[j].products.length;i++){%>
+      <tr>
+        <td><%=coms[j].products[i].name%></td>
+        <td><%=coms[j].products[i].price%> <strong>DA</strong></td>
+      </tr>
+      <%t+=coms[j].products[i].price;}%>
+      <tr>
+        <td colspan="3" class="warning"> <strong>Prix Total:</strong> <%=t%> <strong>DA</strong></td>
+      </tr>
+    </table><hr><br>
+  </div><%}%>
+    </div>
+    </div>
+
+<% include imports/footer.ejs %>

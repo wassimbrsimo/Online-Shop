@@ -1,0 +1,47 @@
+<% include imports/header.ejs%>
+  <!-- Latest compiled and minified CSS -->
+  <style media="screen">
+  .panel {
+    color: #fff !important;
+    background-color: lightgrey !important;
+  border: 2px solid lightblue;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+  .panel-heading {
+    background-color: lightblue;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+  </style>
+  <div class="container" style="padding-left: 18% ,padding-right : 18%">
+  <div class="panel panel-default text-center">
+       <div class="panel-heading">
+         <h2>Ajouter compte</h2>
+       </div>
+
+       <form action="/adda" method="post" style="padding :60px">
+     <div class="input-group">
+       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+       <input id="name" type="text" class="form-control" name="name" placeholder="Nom Utilisateur">
+     </div>
+     <div class="input-group">
+       <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+       <input id="qnt" type="number" class="form-control" name="password" placeholder="Password">
+     </div><div class="input-group">
+       <span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
+       <select class="form-control" id="sel1" name="type">
+        <option>client</option>
+        <option>gérant</option>
+        <option>livreur</option>
+      </select>
+     </div>
+     <div class="form-group">
+       <button class="btn btn-lg btn-primary btn-block">Ajouter Compte !</button>
+     </div>
+   </form>
+     </div>
+<% include imports/footer.ejs %>

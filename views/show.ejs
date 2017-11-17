@@ -1,0 +1,95 @@
+<% include imports/header.ejs%>
+
+  <script>
+      $(document).ready(function () {
+          $('.dropdown-toggle').dropdown();
+      });
+  </script>
+  <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+  <nav class="navbar navbar theme">
+      <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/">TProducts</a>
+            </div>
+          <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li class="dropdown">
+              <a class="dropdown-toggle active" data-toggle="dropdown" href="/products">Produits
+              <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/products/CPU">CPU</a></li>
+                  <li><a href="/products/GPU">GPU</a></li>
+                  <li><a href="/products/RAM">RAM</a></li>
+                  <li><a href="/products/Carte Mere">Carte Mere</a></li>
+                  <li><a href="/products/Disque Dur">Disque Dur</a></li>
+                  <li><a href="/products/Alimentation">Alimentation</a></li>
+                  <li><a href="/products/Boitiers">Boitiers</a></li>
+                  <li><a href="/products/Ecran">Ecran</a></li>
+              </ul>
+              </li>
+              <li><a href="/contact">Contact Us</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+             <%if(!logged){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><li><a href="/register"><span class="glyphicon glyphicon-plus-sign"></span> Register</a></li><%}
+               else if(account.type=="admin"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/admin/products"><span class="glyphicon glyphicon-cog"></span> Admin</a></li><%}
+               else if(account.type=="client"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/client"><span class="glyphicon glyphicon-shopping-cart"></span><strong> <%=account.username%></strong> | Mes Achats <span class="badge badge-inverse"><%=account.cart.length%></span> <span class="badge" style="background-color:green"><%var total=0;for(var i=0;i<account.cart.length;i++){total+=account.cart[i].price;}%><%=total%></span></a></li><%}
+                else {%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/logout"><span class="glyphicon glyphicon-barcode"></span>Manage Stock</a></li><%}%>
+            </ul>
+      </div>
+  </nav></div>
+
+</form>
+<div class="container" style="padding-left: 18% ,padding-right : 18%">
+  <br><br>
+  <div class="panel panel-primary" >
+      <div class="panel-heading text-center">
+      </div>
+      <div class="row">
+            <div class="col-sm-6"  id="prodSelect" >
+              <div class="thumbnail" style="margin:8px">
+                <img  src="<%= prods.image%>">
+              </div>
+            </div>
+
+            <div class="col-sm-6"  id="prodSelect" >
+                <div class="thumbnail text-center theme"  style="margin:50px">
+                  <h2 style="font-family:open sans"><strong><%=prods.name%></strong></h2>
+                </div>
+                <div class="thumbnail theme" style="margin:50px">
+                  <p style="margin-top:20px" > <span class="glyphicon glyphicon-cog"></span><strong>Description Du produit <br></strong> <div class="boxit" style="margin:40px">- <%=prods.description%> </div></p>
+                <hr>  <span class="glyphicon glyphicon-barcode"></span><strong> Quantity</strong> :<%=prods.quantity%><br>
+                <hr>  <span class="glyphicon glyphicon-dashboard"></span><strong> Ajouté il y a :</strong>il y a <% if(((Date.now()-prods.date)/60000).toFixed()<60){%>
+                    <%=((Date.now()-prods.date)/60000).toFixed();%> minutes<%}
+                    else {%> <%=((Date.now()-prods.date)/3600000).toFixed();%> Heures<%}%></p>
+                    <% if(prods.quantity<=0){%>
+                        <span class="label label-warning" style="float:left">INDISPONNIBLE !</span><%}%><%if(Date.now()-prods.date<86400000){%><span class="label label-danger" style="float:left">New!</span><%}%>
+
+                  <h2><span class="label label-danger" style="float:right"><%=prods.price%><strong> DA</strong></span></h2>
+                  <%if(logged==true && account.type=="client"){
+                      var exist=false;var index;
+                      for (var j = 0; j < account.cart.length; j++){
+                            if(account.cart[j].name==prods.name){exist=true;index=j;}
+                      }   %>
+                    <%if(exist){%>
+                      <form action="/deletebuy/<%=index%>" method="post">
+                    <h1><button class="btn btn-sm btn-warning" style="float:right">Suprimer du panier!</button></h1><%}
+                    else {%>
+                      <form action="/buy/<%=prods._id%>" method="post">
+                      <h1><button class="btn btn-sm btn-success <%if(prods.quantity<=0){%>disabled<%}%>" style="float:right"><%if(prods.quantity<=0){%>Can't <%}%>Buy !</button></h1></form><%}
+
+                  }else if(logged==true && (account.type=="admin"|| account.type=="gérant")){%>
+                        <form style="display: inline " action="/delete/<%= prods._id %>" method="post">
+                                  <h1><button type="submit" class="btn btn-danger" style="float:right">
+                                    <i class="glyphicon glyphicon-remove"></i></button></h1></form>
+                    <form style="display: inline " action="/edit/<%= prods._id %>" method="get">
+                                  <h1><button type="submit" class="btn btn-success" style="float:right">
+                                    <i class="glyphicon glyphicon-pencil"></i></button></h1></form>
+                     <%}else {%>
+                       <form action="/buy/<%=prods._id%>" method="post">
+                       <h1><button class="btn btn-sm btn-success" style="float:right">Buy !</button></h1></form><%}%>
+                </div>
+
+              </div>
+          </div>
+    </div>
+<% include imports/footer.ejs %>

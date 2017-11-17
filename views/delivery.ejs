@@ -1,0 +1,68 @@
+<% include imports/header.ejs%>
+
+  <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+  <nav class="navbar navbar theme">
+      <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/">TProducts</a>
+            </div>
+          <ul class="nav navbar-nav">
+              <li ><a href="/">Home</a></li>
+              <li class="active"><a href="/delivery">Delivery</a></li>
+              </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </div>
+  </nav></div>
+
+<div class="container" style="padding-left: 18% ,padding-right : 18%">
+      <div class="row text-center"> </div>
+<%=coms[0].client.adress%>
+
+      <div class="container text">
+        <div class="panel panel-heading text-center">
+          <h3>COMMANDS HISTORY</h3>
+        </div>
+      <div class="row text-center">
+      <%for(var j=0;j<coms.length;j++){%>
+        <div class="col-sm-12">
+          <div class="panel panel-heading theme">
+            <h4>Commander il y a  <% if(((Date.now()-coms[j].date)/60000).toFixed()<60){%>
+              <%=((Date.now()-coms[j].date)/60000).toFixed();%> minutes<%}else {%> <%=((Date.now()-coms[j].date)/3600000).toFixed();%> Heures<%}%><form action="/delivery/<%=coms[j]._id%>" method="post">
+                <button class="btn btn-success" style="float:right"><span class="glyphicon glyphicon-send" style="margin-right:10px"></span>Take Delivery</button></form></h4>
+          </div>
+        <table class="table table-striped">
+          <tr class="theme">
+            <td><h4><strong>N° Commande</strong></td>
+            <td><h4><strong>Client</strong></td>
+            <td><h4><strong>Nombre Produits</strong></td>
+            <td><h4><strong>Adresse</strong></td>
+          </tr>
+          <tr class="theme">
+            <td><h4><strong><%=j%></strong></td>
+            <td><h4><%=coms[j].client%></td>
+              <td><h4><%=coms[j].products.length%></td>
+                <td><h4><%=coms[j].client.adress%></td>
+          </tr>
+        <tr >
+          <td colspan="4" style="background-color:lightgrey"><h5><strong>Produits :</strong></h5></td></tr>
+        <tr class="theme">
+          <td colspan="3"><h4><strong>Nom du produit</strong></td>
+          <td><h4><strong>prix</strong></td>
+        </tr>
+      <%var t=0; for(var i=0;i<coms[j].products.length;i++){%>
+        <tr>
+          <td colspan="3"><h4><%=coms[j].products[i].name%></h4></td>
+          <td><h5><%=coms[j].products[i].price%> <strong>DA</strong></h5></td>
+        </tr>
+        <%t+=coms[j].products[i].price;}%>
+      <tr>
+         <td colspan="4" class="warning"><h3>  <strong>Prix Total:</strong> <%=t+500%> <strong>DA TTC</strong></h3><div class="label label-warning">(frais de livraison inclus)</div></td>
+        </tr>
+      </table><hr><br>
+    </div><%}%>
+      </div>
+      </div>
+      </div>
+      </div>
+<% include imports/footer.ejs %>
