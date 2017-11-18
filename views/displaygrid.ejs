@@ -1,11 +1,16 @@
 <div class="row text-center">
   <% for (var i = 0; i < prods.length; i++) {%>
 <div class="col-sm-3"  id="prodSelect" >
-  <div class="thumbnail theme" style="margin:8px">
+  <div class="thumbnail theme" style="margin:8px ,height:500px">
                 <img  src="<%= prods[i].image%>" >  <% if(prods[i].quantity<=0){%>
                     <span class="label label-warning" style="float:left">INDISPONNIBLE !</span><%}%><%if(Date.now()-prods[i].date<86400000){%><span class="label label-danger" style="float:left">New!</span><%}%>
-</img><hr style="margin-bottom:0px">
-    <p style="margin-bottom:0px,margin-top:0px"><strong><%= prods[i].name %></strong></p>
+</img><hr style="margin-bottom:0px;width:inherit">
+    <p style="margin-top: 1em;
+    margin-bottom: 1em;
+    display:inline-block;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;width :90%"><strong><%= prods[i].name %></strong></p>
     <h3  style="margin-top:0px"><span class="label label-success"><%= prods[i].price%> <strong>DA<strong></span></h3>
 
     <div class="form-group">
