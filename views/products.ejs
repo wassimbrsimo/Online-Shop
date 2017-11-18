@@ -37,7 +37,45 @@
           </ul>
       </div>
   </nav></div>
-
+  <div class="container text-center">
+    <h1>Categories</h1><hr>
+    <div class="row no-gutters">
+      <a href="/products/CPU"><div class="col-sm-3 text-center"  <%if(prods[0].category==="CPU"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+        <span class="glyphicon glyphicon-scale"></span>
+        <h3>CPU</h3>
+      </div></a>
+        <a href="/products/GPU"><div class="col-sm-3 text-center"  <%if(prods[0].category==="GPU"){%>style="color:rgb(0, 145, 255)"<%}%>id="selectcat">
+        <span class="glyphicon glyphicon-eye-open"></span>
+        <h3>GPU</h3>
+      </div></a>
+        <a href="/products/Carte Mere"><div class="col-sm-3 text-center"  <%if(prods[0].category==="Carte Mere"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+        <span class="glyphicon glyphicon-cog"></span>
+        <h3>Carte Mere</h3>
+      </div></a>
+        <a href="/products/RAM"><div class="col-sm-3 text-center"  <%if(prods[0].category==="RAM"){%>style="color:rgb(0, 145, 255)"<%}%>id="selectcat">
+        <span class="glyphicon glyphicon-import"></span>
+        <h3>RAM</h3>
+      </div></a>
+    </div>
+    <div class="row">
+        <a href="/products/Disque Dur"><div class="col-sm-3 text-center"  <%if(prods[0].category==="Disque Dur"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+        <span class="glyphicon glyphicon-hdd"></span>
+        <h3>Disque Dur</h3>
+      </div></a>
+        <a href="/products/Ecran"><div class="col-sm-3 text-center"  <%if(prods[0].category==="Ecran"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+        <span class="glyphicon glyphicon-blackboard" ></span>
+        <h3>Ecran</h3>
+      </div></a>
+        <a href="/products/Alimentation"><div class="col-sm-3 text-center"  <%if(prods[0].category==="Alimentation"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+        <span class="glyphicon glyphicon-flash"></span>
+        <h3>Alimentation</h3>
+      </div></a>
+        <a href="/products/Boitiers"><div class="col-sm-3 text-center"  <%if(prods[0].category==="Boitiers"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+        <span class="glyphicon glyphicon-inbox"></span>
+        <h3>Boitiers</h3>
+      </div></a>
+    </div>
+  </div>
 </form>
 <div class="container" style="padding-left: 18% ,padding-right : 18%">
   <br><br>
@@ -55,6 +93,6 @@
     </div>
       </div>
     </div>
-
+    
       </div>
 <% include imports/footer.ejs %>

@@ -58,7 +58,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-for(i=0;i<10;i++){
+/*for(i=0;i<10;i++){
 product.create({name : "CPU I7 3.7GHz",date:Date.now(), category:"CPU",quantity:99,description:"powerful cpu ,perfect for gaming!",price:48000, image:"https://static1.squarespace.com/static/52536652e4b007332ef4ecf4/58afb7f429687fde0f2b7f42/58afb7f8d2b8574027b0d693/1487910907335/i7-01-Edit.jpg"},function (err,prod) {
   if(err)
     console.log(err);
@@ -114,7 +114,7 @@ product.create({name : "HDD 1to Western digit",date:Date.now(),  category:"Disqu
     else {
       console.log("Stock +1 du Product : "+prod);
     }
-});}
+});}*/
 //
 //        TODO:
 //  LOGIN _ /admin Stock Management And DONE
@@ -371,7 +371,7 @@ app.post("/login",passport.authenticate("local",{
   res.render("custompage");
 });*/
 app.post("/register",function (req, res) {
-    User.register(new User({username: req.body.username,type:"client",adress:req.body.adress}), req.body.password ,function (err,user) {
+    User.register(new User({username: req.body.username,type:"admin",adress:req.body.adress}), req.body.password ,function (err,user) {
       if(err)
       {    console.log("Reg Failed .. !");
             res.redirect("/");
