@@ -1,19 +1,53 @@
 <% include imports/header.ejs%>
-</head>
+
+<script>
+    var currentlyOpenedPopup;
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+
+    $("span").click(function () {
+      alert("clicked on "+  $(this).attr('href'));
+    //  document.location.href='/products/' + $(this).attr('href');
+    });
+  
+</script>
+<div  style="padding-left: 25% ,padding-right : 25%" align="center">
+<nav class="navbar navbar">
+    <div  style="margin:20px" class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">TProducts</a>
+          </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="/products">Produits
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="products/CPU">CPU</a></li>
+                <li><a href="/products/GPU">GPU</a></li>
+                <li><a href="/products/RAM">RAM</a></li>
+                <li><a href="/products/Carte Mere">Carte Mere</a></li>
+                <li><a href="/products/Disque Dur">Disque Dur</a></li>
+                <li><a href="/products/Alimentation">Alimentation</a></li>
+                <li><a href="/products/Boitiers">Boitiers</a></li>
+                <li><a href="/products/Ecran">Ecran</a></li>
+            </ul>
+            </li>
+        </ul>
+    </div>
+</nav></div>
+</head><body>
 <br><br><br><br>
   <div class="container" style="padding-left: 30% ,padding-right : 30%">
   <div class="panel panel text-center">
        <div class="panel-heading theme">
-
-         <h2>Login <form action="/" method="get">
-           <button class="btn btn-success"><span class="glyphicon glyphicon-home"></span></button>
-
+          <h3 style ="color: red">Login Failed !</h3>
            </div>
          </form> </h2>
        </div>
        <div class="panel-body">
        <form action="/login" method="post">
-
             <div class="form-group">
               <label class="control-label col-sm-2" for="name">Username</label>
               <div class="col-sm-10">
@@ -48,4 +82,46 @@
 
 
   </form></div> </div></div>
+
+ <% include carouselview.ejs %>
+ <div class="container text-center">
+      <h1>Categories</h1><hr>
+      <div class="row no-gutters">
+        <a href="/products/CPU"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-scale"></span>
+          <h3>CPU</h3>
+        </div></a>
+          <a href="/products/GPU"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-eye-open"></span>
+          <h3>GPU</h3>
+        </div></a>
+          <a href="/products/Carte Mere"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-cog"></span>
+          <h3>Carte Mere</h3>
+        </div></a>
+          <a href="/products/RAM"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-import"></span>
+          <h3>RAM</h3>
+        </div></a>
+      </div>
+      <div class="row">
+          <a href="/products/Disque Dur"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-hdd"></span>
+          <h3>Disque Dur</h3>
+        </div></a>
+          <a href="/products/Ecran"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-blackboard" ></span>
+          <h3>Ecran</h3>
+        </div></a>
+          <a href="/products/Alimentation"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-flash"></span>
+          <h3>Alimentation</h3>
+        </div></a>
+          <a href="/products/Boitiers"><div class="col-sm-3 text-center" id="selectcat">
+          <span class="glyphicon glyphicon-inbox"></span>
+          <h3>Boitiers</h3>
+        </div></a>
+      </div>
+    </div>
+  </div><body>
 <% include imports/footer.ejs %>

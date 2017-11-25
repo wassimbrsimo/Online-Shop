@@ -30,7 +30,7 @@
               <li><a href="/contact">Contact Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-             <%if(!logged){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><li><a href="/register"><span class="glyphicon glyphicon-plus-sign"></span> Register</a></li><%}
+             <%if(!Logged){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><li><a href="/register"><span class="glyphicon glyphicon-plus-sign"></span> Register</a></li><%}
                else if(account.type=="admin"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/admin/products"><span class="glyphicon glyphicon-cog"></span> Admin</a></li><%}
                else if(account.type=="client"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/client"><span class="glyphicon glyphicon-shopping-cart"></span><strong> <%=account.username%></strong> | Mes Achats <span class="badge badge-inverse"><%=account.cart.length%></span> <span class="badge" style="background-color:green"><%var total=0;for(var i=0;i<account.cart.length;i++){total+=account.cart[i].price;}%><%=total%></span></a></li><%}
                 else {%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/logout"><span class="glyphicon glyphicon-barcode"></span>Manage Stock</a></li><%}%>
@@ -47,49 +47,95 @@
       <div class="row">
             <div class="col-sm-6"  id="prodSelect" >
               <div class="thumbnail" style="margin:8px">
-                <img  src="<%= prods.image%>">
+                <img  src="<%=TheProduct.image%>">
               </div>
             </div>
 
             <div class="col-sm-6"  id="prodSelect" >
                 <div class="thumbnail text-center theme"  style="margin:50px">
-                  <h2 style="font-family:open sans"><strong><%=prods.name%></strong></h2>
+                  <h2 style="font-family:open sans"><strong><%=TheProduct.name%></strong></h2>
                 </div>
                 <div class="thumbnail theme" style="margin:50px">
-                  <p style="margin-top:20px" > <span class="glyphicon glyphicon-cog"></span><strong>Description Du produit <br></strong> <div class="boxit" style="margin:40px">- <%=prods.description%> </div></p>
-                <hr>  <span class="glyphicon glyphicon-barcode"></span><strong> Quantity</strong> :<%=prods.quantity%><br>
-                <hr>  <span class="glyphicon glyphicon-dashboard"></span><strong> Ajouté il y a :</strong>il y a <% if(((Date.now()-prods.date)/60000).toFixed()<60){%>
-                    <%=((Date.now()-prods.date)/60000).toFixed();%> minutes<%}
-                    else {%> <%=((Date.now()-prods.date)/3600000).toFixed();%> Heures<%}%></p>
-                    <% if(prods.quantity<=0){%>
-                        <span class="label label-warning" style="float:left">INDISPONNIBLE !</span><%}%><%if(Date.now()-prods.date<86400000){%><span class="label label-danger" style="float:left">New!</span><%}%>
+                  <p style="margin-top:20px" > <span class="glyphicon glyphicon-cog"></span><strong>Description Du produit <br></strong> <div class="boxit" style="margin:40px">- <%=TheProduct.description%> </div></p>
+                <hr>  <span class="glyphicon glyphicon-barcode"></span><strong> Quantity</strong> :<%=TheProduct.quantity%><br>
+                <hr>  <span class="glyphicon glyphicon-dashboard"></span><strong> Ajouté il y a :</strong>il y a <% if(((Date.now()-TheProduct.date)/60000).toFixed()<60){%>
+                    <%=((Date.now()-TheProduct.date)/60000).toFixed();%> minutes<%}
+                    else {%> <%=((Date.now()-TheProduct.date)/3600000).toFixed();%> Heures<%}%></p>
+                    <% if(TheProduct.quantity<=0){%>
+                        <span class="label label-warning" style="float:left">INDISPONNIBLE !</span><%}%><%if(Date.now()-TheProduct.date<86400000){%><span class="label label-danger" style="float:left">New!</span><%}%>
 
-                  <h2><span class="label label-danger" style="float:right"><%=prods.price%><strong> DA</strong></span></h2>
-                  <%if(logged==true && account.type=="client"){
+                  <h2><span class="label label-danger" style="float:right"><%=TheProduct.price%><strong> DA</strong></span></h2>
+                  <%if(Logged==true && account.type=="client"){
                       var exist=false;var index;
                       for (var j = 0; j < account.cart.length; j++){
-                            if(account.cart[j].name==prods.name){exist=true;index=j;}
+                            if(account.cart[j].name==TheProduct.name){exist=true;index=j;}
                       }   %>
                     <%if(exist){%>
                       <form action="/deletebuy/<%=index%>" method="post">
                     <h1><button class="btn btn-sm btn-warning" style="float:right">Suprimer du panier!</button></h1><%}
                     else {%>
-                      <form action="/buy/<%=prods._id%>" method="post">
-                      <h1><button class="btn btn-sm btn-success <%if(prods.quantity<=0){%>disabled<%}%>" style="float:right"><%if(prods.quantity<=0){%>Can't <%}%>Buy !</button></h1></form><%}
+                      <form action="/buy/<%=TheProduct._id%>" method="post">
+                      <h1><button class="btn btn-sm btn-success <%if(TheProduct.quantity<=0){%>disabled<%}%>" style="float:right"><%if(TheProduct.quantity<=0){%>Can't <%}%>Buy !</button></h1></form><%}
 
-                  }else if(logged==true && (account.type=="admin"|| account.type=="gérant")){%>
-                        <form style="display: inline " action="/delete/<%= prods._id %>" method="post">
+                  }else if(Logged==true && (account.type=="admin"|| account.type=="gérant")){%>
+                        <form style="display: inline " action="/delete/<%= TheProduct._id %>" method="post">
                                   <h1><button type="submit" class="btn btn-danger" style="float:right">
                                     <i class="glyphicon glyphicon-remove"></i></button></h1></form>
-                    <form style="display: inline " action="/edit/<%= prods._id %>" method="get">
+                    <form style="display: inline " action="/edit/<%= TheProduct._id %>" method="get">
                                   <h1><button type="submit" class="btn btn-success" style="float:right">
                                     <i class="glyphicon glyphicon-pencil"></i></button></h1></form>
                      <%}else {%>
-                       <form action="/buy/<%=prods._id%>" method="post">
+                       <form action="/buy/<%=TheProduct._id%>" method="post">
                        <h1><button class="btn btn-sm btn-success" style="float:right">Buy !</button></h1></form><%}%>
                 </div>
 
               </div>
           </div>
-    </div>
+    </div> 
+        
+         <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+      <br><br>
+      <div class="panel panel-succes text-center " style="max-width: 75%">
+        <div class="panel-heading theme text-center">
+         <%if(prods.length!=0){%> SIMILAR PRODUCTS<%}else {%>NO PRODUCTS TO DISPLAY<%}%> 
+        </div>
+        <div class="panel-body" style="border:10px">
+                                                      <div class="row text-center">
+    <% if(prods.length!=0)for (var i = 0; i < prods.length; i++) {%>
+  <div class="col-sm-3"  id="prodSelect">
+    <div class="thumbnail theme" style="margin:0px ;">
+                  <img  src="<%= prods[i].image%>" style=" max-height:200px ; min-height:200px ;object-fit: cover" >  <% if(prods[i].quantity<=0){%>
+                      <span class="label label-warning" style="float:left">INDISPONNIBLE !</span><%}%><%if(Date.now()-prods[i].date<86400000){%><span class="label label-danger" style="float:left">New!</span><%}%>
+  </img><hr style="margin-bottom:0px;width:inherit">
+      <p style="margin-top: 1em;
+      margin-bottom: 1em;
+      display:inline-block;
+      white-space: nowrap;
+      overflow:hidden !important;
+      text-overflow: ellipsis;width :90%"><strong><%= prods[i].name %></strong></p>
+      <h3  style="margin-top:0px"><span class="label label-success"><%= prods[i].price%> <strong>DA<strong></span></h3>
+
+      <div class="form-group">
+        <form action="/show/<%=prods[i]._id%>" method="get">
+        <button class="btn btn-sm btn-primary btn-block" >Details</button></form>
+       <%if(Logged==true && account.type=="client"){
+        var exist=false;var index;
+        for (var j = 0; j < account.cart.length; j++){
+              if(account.cart[j].name==prods[i].name){exist=true;index=j;}
+        }   %>
+      <%if(exist){%>  <form action="/deletebuy/<%=index%>" method="post">
+      <button class="btn btn-sm btn-warning btn-block">Suprimer du panier!</button><%}
+      else {%>  <form action="/buy/<%=prods[i]._id%>" method="post">
+        <button class="btn btn-sm btn-success btn-block <%if(prods[i].quantity<=0){%>disabled<%}%>"><%if(prods[i].quantity<=0){%>Can't <%}%>Buy !</button><%}%></form>
+        <%}%>
+      </div>
+
+  </div>
+  </div>
+  <%} %>
+
+        </div>
+          </div>
+        </div>
+        
 <% include imports/footer.ejs %>

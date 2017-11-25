@@ -1,6 +1,7 @@
 <% include imports/header.ejs%>
 
 <script>
+    var currentlyOpenedPopup;
     $(document).ready(function () {
         $('.dropdown-toggle').dropdown();
     });
@@ -8,7 +9,33 @@
     $("span").click(function () {
       alert("clicked on "+  $(this).attr('href'));
     //  document.location.href='/products/' + $(this).attr('href');
-    })
+    });
+    $(function() {
+    //----- OPEN
+    $('[data-popup-open]').on('click', function(e)  {
+        var popup_class = jQuery(this).attr('data-popup-open');
+        currentlyOpenedPopup=popup_class;
+        $('[data-popup="' + popup_class + '"]').fadeIn(350);
+ 
+        e.preventDefault();
+    });
+ 
+    //----- CLOSE
+    // ----- ESCAPE BUtton
+    $(document).keydown(function(e){
+      if(e.which ===27){
+        $('[data-popup="' + currentlyOpenedPopup+ '"]').fadeOut(350);
+ 
+        e.preventDefault();
+      }
+    });
+    $('[data-popup-close]').on('click', function(e)  {
+        var popup_class = jQuery(this).attr('data-popup-close');
+        $('[data-popup="' + popup_class + '"]').fadeOut(350);
+ 
+        e.preventDefault();
+    });
+});
 </script>
 <div  style="padding-left: 25% ,padding-right : 25%" align="center">
 <nav class="navbar navbar">
@@ -32,7 +59,7 @@
                 <li><a href="/products/Ecran">Ecran</a></li>
             </ul>
             </li>
-            <%if(!logged){%><%}
+            <%if(!Logged){%><%}
               else if(account.type=="admin"){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-folder"></span> Produits</a></li><li><a href="/account/admin/accs"><span class="glyphicon glyphicon-user"></span> Comptes</a></li><%}
               else if(account.type=="client"){%><%}
                else if(account.type=="gérant") {%><%}
@@ -40,7 +67,7 @@
 
             </ul>
           <ul class="nav navbar-nav navbar-right">
-         <%if(!logged){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><li><a href="/register"><span class="glyphicon glyphicon-plus-sign"></span> Register</a></li><%}
+         <%if(!Logged){%><li><a href="/account/admin/products" data-popup-open="popup-1"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><li><a href="/register"><span class="glyphicon glyphicon-plus-sign"></span> Register</a></li><%}
            else if(account.type=="admin"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/admin/products"><span class="glyphicon glyphicon-cog"></span> Admin</a></li><%}
            else if(account.type=="client"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/client"><span class="glyphicon glyphicon-shopping-cart"></span><strong> <%=account.username%></strong> | Mes Achats <span class="badge badge-inverse"><%=account.cart.length%></span> <span class="badge" style="background-color:green"><%var total=0;for(var i=0;i<account.cart.length;i++){total+=account.cart[i].price;}%><%=total%></span></a></li><%}
             else if(account.type=="gérant") {%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/manager"><span class="glyphicon glyphicon-barcode"></span>  Manage Stock</a></li><%}
@@ -51,40 +78,55 @@
 </head>
 
   <body>
+<%include carouselview.ejs%>
+   
+    <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
+      <br><br>
+      <div class="panel panel-succes text-center " style="max-width: 75%">
+        <div class="panel-heading theme text-center">
+         <%if(prods.length!=0){%> NEW PRODUCTS<%}else {%>NO PRODUCTS TO DISPLAY<%}%> 
+        </div>
+        <div class="panel-body" style="border:10px">
+         <div class="row text-center">
+  <% if(prods.length!=0)for (var i = 0; i < prods.length; i++) {%>
+<div class="col-sm-3"  id="prodSelect">
+  <div class="thumbnail theme" style="margin:0px ;">
+                <img  src="<%= prods[i].image%>" style=" max-height:200px ; min-height:200px ;object-fit: cover" >  <% if(prods[i].quantity<=0){%>
+                    <span class="label label-warning" style="float:left">INDISPONNIBLE !</span><%}%><%if(Date.now()-prods[i].date<86400000){%><span class="label label-danger" style="float:left">New!</span><%}%>
+</img><hr style="margin-bottom:0px;width:inherit">
+    <p style="margin-top: 1em;
+    margin-bottom: 1em;
+    display:inline-block;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;width :90%"><strong><%= prods[i].name %></strong></p>
+    <h3  style="margin-top:0px"><span class="label label-success"><%= prods[i].price%> <strong>DA<strong></span></h3>
 
-    <div id="myCarousel" class="carousel fade-carousel slide" data-interval="8000" data-ride="carousel">
+    <div class="form-group">
+      <form action="/show/<%=prods[i]._id%>" method="get">
+      <button class="btn btn-sm btn-primary btn-block" >Details</button></form>
+      <%if(Logged==true && account.type=="client"){
+  var exist=false;var index;
+  for (var j = 0; j < account.cart.length; j++){
+        if(account.cart[j].name==prods[i].name){exist=true;index=j;}
+  }   %>
+<%if(exist){%>  <form action="/deletebuy/<%=index%>" method="post">
+<button class="btn btn-sm btn-warning btn-block">Suprimer du panier!</button><%}
+else {%>  <form action="/buy/<%=prods[i]._id%>" method="post">
+  <button class="btn btn-sm btn-success btn-block <%if(prods[i].quantity<=0){%>disabled<%}%>"><%if(prods[i].quantity<=0){%>Can't <%}%>Buy !</button><%}%></form>
+   <%}%>
 
-  <div class="carousel-inner " align="center">
-    <div class="item active">
-      <img src="http://total3d.ru/media/2016/05/gtx1080-5.jpg" alt="GTx980">
     </div>
 
-    <div class="item">
-      <img src="https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix-RX-480.jpg" alt="Strix">
-    </div>
-
-    <div class="item">
-      <img src="https://www.power.dk/media/1328/gserien.png?quality=90" alt="rog">
-    </div>
-  </div>
-
-  <ol class="carousel-indicators">
-    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-    <li data-target="#myCarousel" data-slide-to="1"></li>
-    <li data-target="#myCarousel" data-slide-to="2"></li>
-  </ol>
-
-  <a class="left carousel-control theme " href="#myCarousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left " style="color:black;"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control theme" href="#myCarousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" style="color:black;"></span>
-    <span class="sr-only">Next</span>
-  </a>
+ </div>
 </div>
+<%} %>
 
-<div class="jumbotron jumbotron-fluid "  style="margin-bottom:0px">
+        </div>
+          </div>
+        </div>
+        
+        <div class="jumbotron jumbotron-fluid "  style="margin-bottom:0px;">
 <div class="container">
   <div class="row">
     <div class="col-sm-8" style="padding-top:3%">
@@ -107,17 +149,6 @@
   </div>
 </div>
 
-    <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
-      <br><br>
-      <div class="panel panel-succes text-center " style="max-width: 75%">
-        <div class="panel-heading theme text-center">
-          NOUVEAUTé
-        </div>
-        <div class="panel-body" style="border:10px">
-          <%include displaygrid.ejs%>
-        </div>
-          </div>
-        </div>
     <div class="container text-center">
       <h1>Categories</h1><hr>
       <div class="row no-gutters">
@@ -158,4 +189,62 @@
       </div>
     </div>
   </div>
+<div class="popup" data-popup="popup-1">
+    <div class="popup-inner">
+   <h1>Login to Your Account</h1><br>
+				  <form action="/login" method="post">
+					<input type="text" name="username" placeholder="Username">
+					<input type="password" name="password" placeholder="Password">
+					<input type="submit" name="login" class="login loginmodal-submit" value="Login">
+				  </form>
+					
+				  <div class="login-help">
+					<a href="#">Register</a> - <a href="#">Forgot Password</a>
+				  </div>
+        <p><a data-popup-close="popup-1" href="#">Close</a></p>
+        <a class="popup-close" data-popup-close="popup-1" href="#">X</a>
+    </div>
+</div>
+<style>
+
+.popup {
+    width:100%;
+    height:100%;
+    display:none;
+    position:fixed;
+    z-index:1000;
+    top:0px;
+    left:0px;
+    background:rgba(0,0,0,0.75);
+}
+ 
+/* Inner */
+.popup-inner {
+    max-width:700px;
+    width:90%;
+    padding:40px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    -webkit-transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%);
+    box-shadow:0px 2px 6px rgba(0,0,0,1);
+    border-radius:3px;
+    background:#fff;
+}
+ 
+/* Close Button */
+.popup-close {
+    width:30px;
+    height:30px;
+    padding-top:4px;
+    display:inline-block;
+    position:absolute;
+    top:10px;
+    right:10px;
+    transition:ease 0.25s all;
+    -webkit-transform:translate(50%, -50%);
+    transform:translate(50%, -50%);
+    border-radius:1000px;
+}</style>
 <% include imports/footer.ejs %>

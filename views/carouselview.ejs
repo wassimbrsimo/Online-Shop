@@ -1,0 +1,23 @@
+<%if(prods.length!=0){%>
+ 
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+     <%var first=true;for(var i=0;i<prods.length!=0;i++)if(prods[i].ad!="{}"){if(first){%>
+      <li data-target="#myCarousel" data-slide-to="<%=i%>" class="active"></li>
+      <%first=false;}else {%>
+       <li data-target="#myCarousel" data-slide-to="<%=i%>"></li>
+      <%}}%>
+    </ol>
+    <div class="carousel-inner">
+       <%var first=true;for(var i=0;i<prods.length!=0;i++)if(prods[i].ad!="{}"){if(prods[i].ad.src!=undefined)if(first){%>
+        <div class="item active">
+         <a href="/show/<%=prods[i]._id%>"> <img src="<%=prods[i].ad.src%>" alt="Los Angeles"  style="background:black;width:100%;max-height:500px;min-height:500px;object-fit:cover"></a>
+        </div>
+         <%first=false;}else {%>
+         <div class="item">
+         <a href="/show/<%=prods[i]._id%>"> <img src="<%=prods[i].ad.src%>" alt="Los Angeles" style="background:black;width:100%;max-height:500px;min-height:500px;object-fit:cover"></a>
+        </div>
+              <%}}%>
+    </div>
+  </div>
+<%}%>

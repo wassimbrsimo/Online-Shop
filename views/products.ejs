@@ -4,6 +4,32 @@
       $(document).ready(function () {
           $('.dropdown-toggle').dropdown();
       });
+       $(function() {
+    //----- OPEN
+    $('[data-popup-open]').on('click', function(e)  {
+        var popup_class = jQuery(this).attr('data-popup-open');
+        currentlyOpenedPopup=popup_class;
+        $('[data-popup="' + popup_class + '"]').fadeIn(350);
+ 
+        e.preventDefault();
+    });
+ 
+    //----- CLOSE
+    // ----- ESCAPE BUtton
+    $(document).keydown(function(e){
+      if(e.which ===27){
+        $('[data-popup="' + currentlyOpenedPopup+ '"]').fadeOut(350);
+ 
+        e.preventDefault();
+      }
+    });
+    $('[data-popup-close]').on('click', function(e)  {
+        var popup_class = jQuery(this).attr('data-popup-close');
+        $('[data-popup="' + popup_class + '"]').fadeOut(350);
+ 
+        e.preventDefault();
+    });
+});
   </script>
   <div class="container" style="padding-left: 25% ,padding-right : 25%" align="center">
   <nav class="navbar navbar theme">
@@ -30,7 +56,7 @@
               <li><a href="/contact">Contact Us</a></li>
               </ul>
             <ul class="nav navbar-nav navbar-right">
-           <%if(!logged){%><li><a href="/account/admin/products"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><%}
+           <%if(!logged){%><li><a href="/account/admin/products" data-popup-open="popup-1"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><%}
              else if(account.type=="admin"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/admin/products"><span class="glyphicon glyphicon-cog"></span> Admin</a></li><%}
              else if(account.type=="client"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/client"><span class="glyphicon glyphicon-shopping-cart"></span><strong> <%=account.username%></strong> | Mes Achats <span class="badge badge-inverse"><%=account.cart.length%></span> <span class="badge" style="background-color:green"><%var total=0;for(var i=0;i<account.cart.length;i++){total+=account.cart[i].price;}%><%=total%></span></a></li><%}
               else {%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/logout"><span class="glyphicon glyphicon-barcode"></span>Manage Stock</a></li><%}%>
@@ -94,5 +120,60 @@
       </div>
     </div>
     
-      </div>
+      </div><div class="popup" data-popup="popup-1">
+    <div class="popup-inner">
+   <h1>Login to Your Account</h1><br>
+				  <form action="/login" method="post">
+					<input type="text" name="username" placeholder="Username">
+					<input type="password" name="password" placeholder="Password">
+					<input type="submit" name="login" class="login loginmodal-submit" value="Login">
+				  </form>
+					
+				  <div class="login-help">
+					<a href="#">Register</a> - <a href="#">Forgot Password</a>
+				  </div>
+        <p><a data-popup-close="popup-1" href="#">Close</a></p>
+        <a class="popup-close" data-popup-close="popup-1" href="#">X</a>
+    </div>
+</div>
+<style>.popup {
+    width:100%;
+    height:100%;
+    display:none;
+    position:fixed;
+    z-index:1000;
+    top:0px;
+    left:0px;
+    background:rgba(0,0,0,0.75);
+}
+ 
+/* Inner */
+.popup-inner {
+    max-width:700px;
+    width:90%;
+    padding:40px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    -webkit-transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%);
+    box-shadow:0px 2px 6px rgba(0,0,0,1);
+    border-radius:3px;
+    background:#fff;
+}
+ 
+/* Close Button */
+.popup-close {
+    width:30px;
+    height:30px;
+    padding-top:4px;
+    display:inline-block;
+    position:absolute;
+    top:10px;
+    right:10px;
+    transition:ease 0.25s all;
+    -webkit-transform:translate(50%, -50%);
+    transform:translate(50%, -50%);
+    border-radius:1000px;
+}</style>
 <% include imports/footer.ejs %>

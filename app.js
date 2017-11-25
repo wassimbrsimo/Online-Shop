@@ -20,6 +20,7 @@ app.use(passport.session());
 mongoose.connect("mongodb://127.0.0.1/TProducts");
 
 ///////////////////////////////////////////////////////////////////////////////////////
+
 var productSchema = new mongoose.Schema({
   name: String,
   price: Number,
@@ -27,7 +28,8 @@ var productSchema = new mongoose.Schema({
   category: String,
   quantity: Number,
   description: String,
-  date: Number
+  date: Number,
+  ad:{src:String}
 });
 var commandSchema = new mongoose.Schema({
   client: String,
@@ -66,57 +68,23 @@ product.create({name : "CPU I7 3.7GHz",date:Date.now(), category:"CPU",quantity:
       console.log("Stock +1 du Product : "+prod);
     }
 });
-product.create({name : "GTX980", category:"GPU",date:Date.now(),quantity:99,description:"perfect for gaming!",price:72000, image:"http://lorempixel.com/400/200/technics"},function (err,prod) {
+product.create({ad:{name:"STRIX",src:"https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix-RX-480.jpg"},name : "GTX980", category:"GPU",date:Date.now(),quantity:99,description:"perfect for gaming!",price:72000, image:"http://lorempixel.com/400/200/technics"},function (err,prod) {
   if(err)
     console.log(err);
     else {
       console.log("Stock +1 du Product : "+prod);
     }
 });
-product.create({name : "CORSAIR TITANIUM RAM 16GB",date:Date.now(), category:"RAM",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/1200/cats"},function (err,prod) {
+product.create({ad:{src:"https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix-RX-480.jpg"},name : "CORSAIR TITANIUM RAM 16GB",date:Date.now(), category:"RAM",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/1200/cats"},function (err,prod) {
   if(err)
     console.log(err);
     else {
       console.log("Stock +1 du Product : "+prod);
     }
 });
-product.create({name : "H61 MSI",date:Date.now(), category:"Carte Mere",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/200/cats"},function (err,prod) {
-  if(err)
-    console.log(err);
-    else {
-      console.log("Stock +1 du Product : "+prod);
-    }
-});
-product.create({name : "Philips 4K 27'' Screen", date:Date.now(),category:"Ecran",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/1920/80/nightlife"},function (err,prod) {
-  if(err)
-    console.log(err);
-    else {
-      console.log("Stock +1 du Product : "+prod);
-    }
-});
-product.create({name : "Cooler Master Fridge Box ",date:Date.now(), category:"Boitiers",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/1920/food"},function (err,prod) {
-  if(err)
-    console.log(err);
-    else {
-      console.log("Stock +1 du Product : "+prod);
-    }
-});
-product.create({name : "CoolerMaster 650W PSU",date:Date.now(),  category:"Alimentation",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/1400/200/people"},function (err,prod) {
-  if(err)
-    console.log(err);
-    else {
-      console.log("Stock +1 du Product : "+prod);
-    }
-});
-product.create({name : "HDD 1to Western digit",date:Date.now(),  category:"Disque Dur",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/200/sports"},function (err,prod) {
-  if(err)
-    console.log(err);
-    else {
-      console.log("Stock +1 du Product : "+prod);
-    }
-});}*/
+}
 
-
+*/
 
 
 
@@ -170,20 +138,7 @@ app.get("/command", isClientLoggedIn, function (req, res) {
   res.render("Command", { user: req.user, products: req.user.cart });
 
 });
-app.get("/show/:id", function (req, res) {
-  product.findById(req.params.id, function (err, product) {
-    if (err) {
-      console.log(err);
-    } else {
-      if (req.isAuthenticated()) {
-        res.render("show", { prods: product, logged: true, account: req.user });
-      }
-      else {
-        res.render("show", { prods: product, logged: false, account: null });
-      }
-    }
-  });
-});
+
 app.get("/account/client", isClientLoggedIn, function (req, res) {
   User.findById(req.user._id, function (err, products) {
     if (err) { console.log(err); } else {
@@ -296,19 +251,33 @@ app.get("/edit/:id", isAdminLoggedIn, function (req, res) {
   });
 });
 app.get("/show/:id", function (req, res) {
-  product.findById(req.params.id, function (err, products) {
+  product.findById(req.params.id, function (err, TheProd) {
     if (err) console.log(err);
     else {
-      if (req.isAuthenticated()) {
-        res.render("show", { prods: products, Logged: true, account: req.user });
-      }
-      else {
-        res.render("show", { prods: products, Logged: false, account: null });
-      }
+      product.find({category:TheProd.category,price:{$gt :TheProd.price}}).limit(8).sort({price : 1}).exec(function(err, sameCatProds){if(sameCatProds.length<8)
+        {
+          product.find({category:TheProd.category,price:{$lt :TheProd.price}}).limit(8-sameCatProds.length).sort({price: -1}).exec(function(err, lessCatProds){
+            var someCatProds = sameCatProds.concat(lessCatProds);
+            if (req.isAuthenticated()) {
+              res.render("show", { TheProduct: TheProd, Logged: true, account: req.user,prods:someCatProds });
+            }
+            else {
+              res.render("show", { TheProduct: TheProd, Logged: false, account: null ,prods:someCatProds});
+            }
+          });
+        }
+      else
+        if (req.isAuthenticated()) {
+          res.render("show", { TheProduct: TheProd, Logged: true, account: req.user,prods:sameCatProds });
+        }
+        else {
+          res.render("show", { TheProduct: TheProd, Logged: false, account: null ,prods:sameCatProds});
+        }
+      });
+     
     }
   });
 });
-
 app.post("/edit/:id", function (req, res) {  // EDIT PRODUCT
   var name = req.body.name;
   var image = req.body.image;
@@ -316,7 +285,8 @@ app.post("/edit/:id", function (req, res) {  // EDIT PRODUCT
   var desc = req.body.desc;
   var category = req.body.category;
   var quantity = req.body.quantity;
-  product.findByIdAndUpdate(req.params.id, { name: name, image: image, price: price, description: desc, category: category, quantity: quantity }, function (err, edit) {
+  var ad =req.body.ad;
+  product.findByIdAndUpdate(req.params.id, {ad:{src:ad},name: name, image: image, price: price, description: desc, category: category, quantity: quantity }, function (err, edit) {
     if (err) {
       console.log("didn't Find");
     } else {
@@ -326,14 +296,14 @@ app.post("/edit/:id", function (req, res) {  // EDIT PRODUCT
 });
 
 app.post("/addp", function (req, res) {     //ADD PRODUCT
-  console.log("Adding ur thing0");
   var name = req.body.name;
   var image = req.body.image;
   var price = req.body.price;
   var desc = req.body.desc;
   var category = req.body.category;
   var quantity = req.body.quantity;
-  var newProduct = { name: name, image: image, date: Date.now(), price: price, description: desc, category: category, quantity: quantity }
+  var ad = req.body.ad;
+  var newProduct = { name: name, image: image, date: Date.now(), price: price, description: desc, category: category, quantity: quantity ,ad: {src:ad} }
   product.create(newProduct, function (err, newlyMade) {
     if (err) {
       console.log(err);
@@ -365,7 +335,12 @@ app.get("/register", function (req, res) {
   res.render("register");
 });
 app.get("/login", function (req, res) {
-  res.render("login");
+ 
+  res.render("login",{state: null});
+});
+app.get("/login/fail", function (req, res) {
+ 
+  res.render("login",{state: fail});
 });
 app.get("/account", function (req, res) {
   if (req.user.name == "admin") { res.redirect("/account/admin"); }
@@ -373,13 +348,12 @@ app.get("/account", function (req, res) {
     res.redirect("/");
   }
 });
-app.post("/login", passport.authenticate("local", {
+app.post("/login",passport.authenticate("local", {
   successRedirect: "/account",
-  failureRedirect: "/login"
+  failureRedirect: "/login/fail"
 }));
-/*app.get("/register",function (res,res) {
-  res.render("custompage");
-});*/
+
+
 app.post("/register", function (req, res) {
   User.register(new User({ username: req.body.username, type: "admin", adress: req.body.adress }), req.body.password, function (err, user) {
     if (err) {
@@ -400,10 +374,10 @@ app.get("/products/:category", function (req, res) {
     if (err) {
     } else {
       if (req.isAuthenticated()) {
-        res.render("products", { prods: found, logged: true, account: req.user });
+        res.render("products", { prods: found, Logged: true, account: req.user });
       }
       else {
-        res.render("products", { prods: found, logged: false, account: null });
+        res.render("products", { prods: found, Logged: false, account: null });
       }
     }
   });
@@ -412,19 +386,19 @@ app.get("/products/:category", function (req, res) {
 
 app.get("/products/:category/:sort", function (req, res) {
   if (req.params.sort == "p") {
-    var prods = product.find({ category: req.params.category }).sort({ price: -1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, logged: true, account: req.user }); } else { res.render("products", { prods: found, logged: false, account: null }); } } });
+    var prods = product.find({ category: req.params.category }).sort({ price: -1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, Logged: true, account: req.user }); } else { res.render("products", { prods: found, Logged: false, account: null }); } } });
   }
   else if (req.params.sort == "m") {
-    var prods = product.find({ category: req.params.category }).sort({ price: 1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, logged: true, account: req.user }); } else { res.render("products", { prods: found, logged: false, account: null }); } } });
+    var prods = product.find({ category: req.params.category }).sort({ price: 1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, Logged: true, account: req.user }); } else { res.render("products", { prods: found, Logged: false, account: null }); } } });
   }
   else if (req.params.sort == "n") {
-    var prods = product.find({ category: req.params.category }).sort({ date: -1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, logged: true, account: req.user }); } else { res.render("products", { prods: found, logged: false, account: null }); } } });
+    var prods = product.find({ category: req.params.category }).sort({ date: -1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, Logged: true, account: req.user }); } else { res.render("products", { prods: found, Logged: false, account: null }); } } });
   }
   else if (req.params.sort == "a") {
-    var prods = product.find({ category: req.params.category }).sort({ date: 1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, logged: true, account: req.user }); } else { res.render("products", { prods: found, logged: false, account: null }); } } });
+    var prods = product.find({ category: req.params.category }).sort({ date: 1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, Logged: true, account: req.user }); } else { res.render("products", { prods: found, Logged: false, account: null }); } } });
   }
   else if (req.params.sort == "d") {
-    var prods = product.find({ category: req.params.category }).sort({ quantity: -1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, logged: true, account: req.user }); } else { res.render("products", { prods: found, logged: false, account: null }); } } });
+    var prods = product.find({ category: req.params.category }).sort({ quantity: -1 }).exec(function (err, found) { if (err) { } else { if (req.isAuthenticated()) { res.render("products", { prods: found, Logged: true, account: req.user }); } else { res.render("products", { prods: found, Logged: false, account: null }); } } });
   }
 });
 
@@ -455,17 +429,17 @@ app.get("/", function (req, res) {
   product.find({}).limit(8).sort('-date').exec(function (err, products) {
     if (err) console.log(err);
     else {
-      //  res.send(req.user.username);
-      if (req.isAuthenticated()) {
-        command.find().exec(function (err, found) {
-          res.render("landing", { prods: products, logged: true, account: req.user, commands: found });
-
-        })
+     // product.find({}).exec(function(err,ads){
+        if (req.isAuthenticated()) {
+          command.find().exec(function (err, found) {
+            res.render("landing", { prods: products, Logged: true, account: req.user, commands: found });
+  
+          })
+        }
+        else {
+          res.render("landing", { prods: products, Logged: false, account: null, commands: null });
+        }
       }
-      else {
-        res.render("landing", { prods: products, logged: false, account: null, commands: null });
-      }
-    }
   });
 });
 app.listen(3000, '0.0.0.0', function () {
