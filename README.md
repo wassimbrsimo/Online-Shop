@@ -1,10 +1,14 @@
 # Online-Shop
 An Open Source online Shop website  
 ## How to use
+```
 git clone https://github.com/wassimbrsimo/Online-Shop.git
 npm install
-host MongoDB
+```
+- install [Mongodb](https://www.mongodb.com/) and host the database before running the node server like below :
+```
 node app.js
+```
 ## Features
 - Account system management with grades
   - **Administrator** : can manage other accounts and edit the shop products 
@@ -19,3 +23,4 @@ node app.js
 ## Screenshots
 ![Landing Page](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage.PNG?raw=true "Landing page")
 ![Landing Page 2](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage2.PNG?raw=true "Landing page2")
+ 
