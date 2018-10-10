@@ -23,4 +23,6 @@ node app.js
 ## Screenshots
 ![Landing Page](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage.PNG?raw=true "Landing page")
 ![Landing Page 2](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage2.PNG?raw=true "Landing page2")
- 
+![Client command](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_clientCommand.PNG?raw=true "client Command")
+![Product Details](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_productDetails.PNG?raw=true "Product Details")
+![Client Cart](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_clientCart.PNG?raw=true "Client Cart")
