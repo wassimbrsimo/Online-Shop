@@ -12,4 +12,5 @@ An Open Source online Shop website
 - Modular products parameters with category for easy browsing
 - Client Cart System with commands to confirm and commands history
 ## Screenshots
-![Landing page](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage.PNG?raw=true "Landing page")
+![Landing Page](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage.PNG?raw=true "Landing page")
+![Landing Page 2](https://github.com/wassimbrsimo/Online-Shop/blob/master/screenshots/capture_landingPage2.PNG?raw=true "Landing page2")
