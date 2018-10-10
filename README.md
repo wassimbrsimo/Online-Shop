@@ -1,5 +1,10 @@
 # Online-Shop
 An Open Source online Shop website  
+##How to use
+git clone https://github.com/wassimbrsimo/Online-Shop.git
+npm install
+host MongoDB
+node app.js
 ## Features
 - Account system management with grades
   - **Administrator** : can manage other accounts and edit the shop products 
