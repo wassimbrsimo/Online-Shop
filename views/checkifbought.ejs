@@ -1,4 +1,4 @@
-<%if(logged==true && account.type=="client"){
+<%if(Logged==true && account.type=="client"){
   var exist=false;var index;
   for (var j = 0; j < account.cart.length; j++){
         if(account.cart[j].name==prods[i].name){exist=true;index=j;}

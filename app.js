@@ -59,23 +59,23 @@ passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-/*for(i=0;i<10;i++){
-product.create({name : "CPU I7 3.7GHz",date:Date.now(), category:"CPU",quantity:99,description:"powerful cpu ,perfect for gaming!",price:48000, image:"http://lorempixel.com/400/200/nightlife"},function (err,prod) {
+////////////////////////////////////////////////////////////////////////////////////
+for(i=0;i<10;i++){
+product.create({name : "CPU I7 3.7GHz",date:Date.now(), category:"CPU",quantity:99,description:"powerful cpu ,perfect for gaming!",price:48000, image:"http://lorempixel.com/400/400/?blur"},function (err,prod) {
   if(err)
     console.log(err);
     else {
       console.log("Stock +1 du Product : "+prod);
     }
 });
-product.create({ad:{name:"STRIX",src:"https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix-RX-480.jpg"},name : "GTX980", category:"GPU",date:Date.now(),quantity:99,description:"perfect for gaming!",price:72000, image:"http://lorempixel.com/400/200/technics"},function (err,prod) {
+product.create({ad:{name:"STRIX",src:"https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix-RX-480.jpg"},name : "GTX980", category:"GPU",date:Date.now(),quantity:99,description:"perfect for gaming!",price:72000, image:"http://lorempixel.com/400/400/?blur"},function (err,prod) {
   if(err)
     console.log(err);
     else {
       console.log("Stock +1 du Product : "+prod);
     }
 });
-product.create({ad:{src:"https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix-RX-480.jpg"},name : "CORSAIR TITANIUM RAM 16GB",date:Date.now(), category:"RAM",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/1200/cats"},function (err,prod) {
+product.create({ad:{src:"https://venturebeat.com/wp-content/uploads/2018/04/evga-gtx-1080-100663485-orig.png?fit=578%2C374&strip=all"},name : "CORSAIR TITANIUM RAM 16GB",date:Date.now(), category:"RAM",quantity:99,description:"perfect for gaming!",price:18000, image:"http://lorempixel.com/400/400/?blur"},function (err,prod) {
   if(err)
     console.log(err);
     else {
@@ -84,7 +84,7 @@ product.create({ad:{src:"https://playpro.vn/wp-content/uploads/2016/07/ROG-Strix
 });
 }
 
-*/
+
 
 
 
@@ -221,7 +221,7 @@ app.post("/delete/:id", function (req, res) {
   if (req.params.id == "all") {
     product.remove({}, function (err) {
       console.log("WARNING : ALL PRODUCT DATA ERASING  .   .   .   .   . ");
-      res.redirect("/account/admin/product");
+      res.redirect("/account/admin/products");
     })
   } else {
     product.findByIdAndRemove(req.params.id, function (err) {
@@ -338,10 +338,10 @@ app.get("/login", function (req, res) {
  
   res.render("login",{state: null});
 });
-app.get("/login/fail", function (req, res) {
+/*app.get("/login/fail", function (req, res) {
  
-  res.render("login",{state: fail});
-});
+  res.render("login",{state: "fail"});
+});*/
 app.get("/account", function (req, res) {
   if (req.user.name == "admin") { res.redirect("/account/admin"); }
   else {
@@ -350,7 +350,7 @@ app.get("/account", function (req, res) {
 });
 app.post("/login",passport.authenticate("local", {
   successRedirect: "/account",
-  failureRedirect: "/login/fail"
+  failureRedirect: "/"
 }));
 
 

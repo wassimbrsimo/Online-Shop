@@ -56,7 +56,7 @@
               <li><a href="/contact">Contact Us</a></li>
               </ul>
             <ul class="nav navbar-nav navbar-right">
-           <%if(!logged){%><li><a href="/account/admin/products" data-popup-open="popup-1"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><%}
+           <%if(!Logged){%><li><a href="/account/admin/products" data-popup-open="popup-1"><span class="glyphicon glyphicon-log-in"></span> Login</a></li><%}
              else if(account.type=="admin"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/admin/products"><span class="glyphicon glyphicon-cog"></span> Admin</a></li><%}
              else if(account.type=="client"){%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/account/client"><span class="glyphicon glyphicon-shopping-cart"></span><strong> <%=account.username%></strong> | Mes Achats <span class="badge badge-inverse"><%=account.cart.length%></span> <span class="badge" style="background-color:green"><%var total=0;for(var i=0;i<account.cart.length;i++){total+=account.cart[i].price;}%><%=total%></span></a></li><%}
               else {%><li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><li><a href="/logout"><span class="glyphicon glyphicon-barcode"></span>Manage Stock</a></li><%}%>
@@ -66,7 +66,7 @@
   <div class="container text-center">
     <h1>Categories</h1><hr>
     <div class="row no-gutters">
-      <a href="/products/CPU"><div class="col-sm-3 text-center"  <%if(prods[0].category==="CPU"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
+      <a href="/products/CPU"><div class="col-sm-3 text-center"  <%if(prods.length!=0){if(prods[0].category==="CPU"){%>style="color:rgb(0, 145, 255)"<%}%> id="selectcat">
         <span class="glyphicon glyphicon-scale"></span>
         <h3>CPU</h3>
       </div></a>
@@ -111,8 +111,9 @@
                                                                  <a href="/products/<%=prods[0].category%>/m"><div class="label label-success">moins cher !</div></a>
                                                                  <a href="/products/<%=prods[0].category%>/n"><div class="label label-primary">plus récent !</div></a>
                                                                   <a href="/products/<%=prods[0].category%>/a"><div class="label label-default">plus ancien !</div></a>
-                                                                   <a href="/products/<%=prods[0].category%>/d"><div class="label label-danger">disponnibilité</div></a><%}%>
-    </div>
+                                                                   <a href="/products/<%=prods[0].category%>/d"><div class="label label-danger">disponnibilité</div></a><%}}else {%>
+                                                                    <h4>no Items</h4>
+    <%}%></div>
     <div class="panel-body">
       <%include displaygrid.ejs%>
 
